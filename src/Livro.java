@@ -4,6 +4,7 @@ public class Livro {
     private String autor;
     private int anoPublicacao;
     private String isbn;
+    private boolean disponivel;
 
     public String getIsbn() {
         return isbn;
@@ -43,5 +44,13 @@ public class Livro {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isDisponivel() {
+        return disponivel;
+    }
+
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 }

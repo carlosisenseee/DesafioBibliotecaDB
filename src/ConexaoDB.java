@@ -7,9 +7,8 @@ public class ConexaoDB {
         String user = "root";
         String password = "CaI=2007";
         String url = "jdbc:mysql://localhost:3306/biblioteca";
-
         try {
-            return DriverManager.getConnection(user, password, url);
+            return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
             return null;

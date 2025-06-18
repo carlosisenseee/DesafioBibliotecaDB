@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncionarioDao {
+public class FuncionarioCrud {
     public static List<Funcionario> getAll() throws SQLException{
         List<Funcionario> funcionarios = new ArrayList<Funcionario>();
         String sql = "SELECT * FROM tb_funcionarios";
@@ -81,6 +81,25 @@ public class FuncionarioDao {
             System.out.println(e.getMessage());
         } finally {
             return funcionario;
+        }
+    }
+
+    public static int getByCpf(String cpf) {
+        Funcionario f = new Funcionario();
+        String sql = "SELECT * FROM tb_funcionarios WHERE cpf = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1, cpf);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                f.setId(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            return f.getId();
         }
     }
 }

@@ -1,11 +1,10 @@
-import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivroDao {
+public class LivroCrud {
     public static List<Livro> getAll() {
         List<Livro> livros = new ArrayList<Livro>();
         String sql = "SELECT * FROM tb_livros";
@@ -79,6 +78,36 @@ public class LivroDao {
     public static void inserir(Livro livro) {
         String sql = "INSERT INTO tb_livros(titulo, autor, anoPublicacao, isbn) VALUES (?, ?, ?, ?)";
 
-        
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1,livro.getTitulo());
+            stm.setString(2,livro.getAutor());
+            stm.setInt(3,livro.getAnoPublicacao());
+            stm.setString(4,livro.getIsbn());
+            stm.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    public static Livro getByIsbn(String isbn) {
+        Livro l = new Livro();
+        String sql = "SELECT * FROM tb_livros WHERE isbn = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1,isbn);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                l.setId(rs.getInt("id"));
+                l.setDisponivel(rs.getBoolean("disponivel"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            return l;
+        }
     }
 }

@@ -12,7 +12,6 @@ public class Main {
         String usuario = scan.next();
         System.out.println("Digite sua senha");
        
-        	
         		System.out.println("""
 					=== Biblioteca Piriri Parara ===
 					Digite para:
@@ -20,12 +19,7 @@ public class Main {
 					2 - Devolver um livro - ok
 					3 - Alterar Dados - 
 					4 - 
-					
-					
         			""");
-        		
-        break;
-        
         }
     }     		
 				
