@@ -17,6 +17,10 @@ public class Main2 {
                         6 - Alterar Usuario
                         7 - Remover Livro
                         8 - Alterar Livro
+                        9 - Consultar Livros
+                        10 - Consultar Usuarios
+                        11 - Consultar Funcionarios
+                        12 - Consultar Emprestimos
                         9 - Sair
                         """);
                 System.out.print("Informe sua escolha: ");
