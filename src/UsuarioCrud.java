@@ -55,12 +55,13 @@ public class UsuarioCrud {
     }
 
     public static void alterar(Usuario usuario) {
-        String sql = "UPTADE tb_usuarios SET nome = ?, cpf = ? WHERE id = ?";
+        String sql = "UPDATE tb_usuarios SET nome = ?, cpf = ? WHERE id = ?";
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setString(1, usuario.getNome());
             stm.setString(2, usuario.getCpf());
             stm.setInt(3, usuario.getId());
+            stm.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -88,6 +89,25 @@ public class UsuarioCrud {
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setString(1,cpf);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                u.setId(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            return u.getId();
+        }
+    }
+
+    public static int getByNome(String nome) {
+        Usuario u = new Usuario();
+        String sql = "SELECT * FROM tb_usuarios WHERE nome = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1,nome);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 u.setId(rs.getInt("id"));
