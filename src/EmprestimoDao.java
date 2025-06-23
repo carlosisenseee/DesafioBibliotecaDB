@@ -1,15 +1,17 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class EmprestimoCrud {
+public class EmprestimoDao {
     public static Emprestimo inserir (String cpf, String isbn, String cpfU) {
         String sql = "INSERT INTO tb_emprestimos(usuario_id, livro_id, funcionario_id) VALUES (?,?, ?)";
         Emprestimo e = new Emprestimo();
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1, UsuarioCrud.getByCpf(cpf));
+            stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
             stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
             stm.setInt(3, FuncionarioCrud.getByCpf(cpfU));
             if(!LivroCrud.getByIsbn(isbn).isDisponivel()) {
@@ -29,7 +31,7 @@ public class EmprestimoCrud {
         String sql = "DELETE FROM tb_emprestimos WHERE id = ?";
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1, EmprestimoCrud.getByCpfEIsbn(cpf, isbn).getId());
+            stm.setInt(1, EmprestimoDao.getByCpfEIsbn(cpf, isbn).getId());
             stm.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -43,7 +45,7 @@ public class EmprestimoCrud {
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1,UsuarioCrud.getByCpf(cpf));
+            stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
             stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
@@ -59,6 +61,29 @@ public class EmprestimoCrud {
         }
         finally {
             return e;
+        }
+    }
+
+    public static List<Emprestimo> getByCpf(String cpf) {
+        String sql = "SELECT * FROM tb_emprestimos WHERE usuario_id = ?";
+        List<Emprestimo> emprestimos = new ArrayList<>();
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Emprestimo e = new Emprestimo();
+                e.setId(rs.getInt("id"));
+                e.setUsuario_id(rs.getInt("usuario_id"));
+                e.setLivro_id(rs.getInt("livro_id"));
+                e.setFuncionario_id(rs.getInt("funcionario_id"));
+                emprestimos.add(e);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        } finally {
+            return emprestimos;
         }
     }
 }

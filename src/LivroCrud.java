@@ -110,4 +110,23 @@ public class LivroCrud {
             return l;
         }
     }
-}
+
+    public static String getByTitulo(String titulo) {
+        Livro l = new Livro();
+        String sql = "SELECT * FROM tb_livros WHERE titulo = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1,titulo);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                l.setId(rs.getInt("isbn"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            return l.getIsbn();
+        }
+    }
+    }

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioCrud {
+public class UsuarioDao {
     public static List<Usuario> getAll() throws SQLException {
         List<Usuario> usuarios = new ArrayList<Usuario>();
         String sql = "SELECT * FROM tb_usuarios";
@@ -82,7 +82,7 @@ public class UsuarioCrud {
         }
     }
 
-    public static int getByCpf(String cpf) {
+    public static Usuario getByCpf(String cpf) {
         Usuario u = new Usuario();
         String sql = "SELECT * FROM tb_usuarios WHERE cpf = ?";
 
@@ -92,31 +92,35 @@ public class UsuarioCrud {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 u.setId(rs.getInt("id"));
+                u.setCpf(rs.getString("cpf"));
+                u.setNome(rs.getString("nome"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         finally {
-            return u.getId();
+            return u;
         }
     }
 
-    public static int getByNome(String nome) {
+    public static Usuario getByNome(String nome) {
         Usuario u = new Usuario();
-        String sql = "SELECT * FROM tb_usuarios WHERE nome = ?";
+        String sql = "SELECT * FROM tb_usuarios WHERE nome like ?";
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setString(1,nome);
+            stm.setString(1,nome + "%");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 u.setId(rs.getInt("id"));
+                u.setNome(rs.getString("nome"));
+                u.setCpf(rs.getString("cpf"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         finally {
-            return u.getId();
+            return u;
         }
     }
 }
