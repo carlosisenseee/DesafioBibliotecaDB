@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncionarioCrud {
+public class FuncionarioDao {
     public static List<Funcionario> getAll() throws SQLException{
         List<Funcionario> funcionarios = new ArrayList<Funcionario>();
         String sql = "SELECT * FROM tb_funcionarios";
@@ -33,10 +33,12 @@ public class FuncionarioCrud {
         stm.setInt(1, id);
         ResultSet rs = stm.executeQuery();
         try {
+            if (rs.next()) {
                 f.setId(rs.getInt("id"));
                 f.setNome(rs.getString("nome"));
                 f.setCpf(rs.getString("cpf"));
                 f.setCargo(rs.getString("cargo"));
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivroCrud {
-    public static List<Livro> getAll() {
+public class LivroDao {
+    public static List<Livro> getAll() throws SQLException{
         List<Livro> livros = new ArrayList<Livro>();
         String sql = "SELECT * FROM tb_livros";
 
@@ -14,6 +14,7 @@ public class LivroCrud {
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Livro l = new Livro();
+                l.setId(rs.getInt("id"));
                 l.setTitulo(rs.getString("titulo"));
                 l.setAutor(rs.getString("autor"));
                 l.setAnoPublicacao(rs.getInt("anoPublicacao"));
@@ -101,6 +102,10 @@ public class LivroCrud {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 l.setId(rs.getInt("id"));
+                l.setTitulo(rs.getString("titulo"));
+                l.setAutor(rs.getString("autor"));
+                l.setAnoPublicacao(rs.getInt("anoPublicacao"));
+                l.setIsbn(rs.getString("isbn"));
                 l.setDisponivel(rs.getBoolean("disponivel"));
             }
         } catch (SQLException e) {
@@ -111,22 +116,27 @@ public class LivroCrud {
         }
     }
 
-    public static String getByTitulo(String titulo) {
+    public static Livro getByTitulo(String titulo) {
         Livro l = new Livro();
-        String sql = "SELECT * FROM tb_livros WHERE titulo = ?";
+        String sql = "SELECT * FROM tb_livros WHERE titulo like ?";
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setString(1,titulo);
+            stm.setString(1,titulo + "%");
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                l.setId(rs.getInt("isbn"));
+                l.setId(rs.getInt("id"));
+                l.setTitulo(rs.getString("titulo"));
+                l.setAutor(rs.getString("autor"));
+                l.setAnoPublicacao(rs.getInt("anoPublicacao"));
+                l.setIsbn(rs.getString("isbn"));
+                l.setDisponivel(rs.getBoolean("disponivel"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         finally {
-            return l.getIsbn();
+            return l;
         }
     }
     }

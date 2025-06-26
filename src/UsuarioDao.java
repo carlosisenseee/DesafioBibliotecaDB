@@ -32,9 +32,11 @@ public class UsuarioDao {
         stm.setInt(1, id);
         ResultSet rs = stm.executeQuery();
         try {
-            u.setId(rs.getInt("id"));
-            u.setNome(rs.getString("nome"));
-            u.setCpf(rs.getString("cpf"));
+            if (rs.next()) {
+                u.setId(rs.getInt("id"));
+                u.setNome(rs.getString("nome"));
+                u.setCpf(rs.getString("cpf"));
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

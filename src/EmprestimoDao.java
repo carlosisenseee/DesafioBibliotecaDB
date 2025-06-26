@@ -5,6 +5,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EmprestimoDao {
+    public static List<Emprestimo> getAll() throws SQLException {
+        List<Emprestimo> emprestimos = new ArrayList<>();
+        String sql = "SELECT * FROM tb_emprestimos";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Emprestimo e = new Emprestimo();
+                e.setId(rs.getInt("id"));
+                e.setUsuario_id(rs.getInt("usuario_id"));
+                e.setLivro_id(rs.getInt("livro_id"));
+                e.setFuncionario_id(rs.getInt("funcionario_id"));
+                emprestimos.add(e);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            return emprestimos;
+        }
+    }
+
     public static Emprestimo inserir (String cpf, String isbn, String cpfU) {
         String sql = "INSERT INTO tb_emprestimos(usuario_id, livro_id, funcionario_id) VALUES (?,?, ?)";
         Emprestimo e = new Emprestimo();
@@ -12,9 +34,9 @@ public class EmprestimoDao {
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
-            stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
-            stm.setInt(3, FuncionarioCrud.getByCpf(cpfU));
-            if(!LivroCrud.getByIsbn(isbn).isDisponivel()) {
+            stm.setInt(2, LivroDao.getByIsbn(isbn).getId());
+            stm.setInt(3, FuncionarioDao.getByCpf(cpfU));
+            if(!LivroDao.getByIsbn(isbn).isDisponivel()) {
                 System.out.println("Livro ja emprestado");
             } else {
                 stm.execute();
@@ -46,7 +68,7 @@ public class EmprestimoDao {
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
-            stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
+            stm.setInt(2, LivroDao.getByIsbn(isbn).getId());
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 e.setId(rs.getInt("id"));
