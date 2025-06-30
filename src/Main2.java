@@ -7,7 +7,7 @@ import java.util.Scanner;
 // (Criar na tabela tb_funcionarios e coluna login(nome.sobrenome) e a coluna senha)
 
 public class Main2 {
-    static Funcionario f;
+    static Funcionario funcionarioPrincipal = new Funcionario();
     public static void main(String[] args) throws Exception {
         if (ConexaoDB.getConexao() != null) {
             int opcao;
@@ -40,10 +40,10 @@ public class Main2 {
                     case 2: //Perfeito
                         cadastrarUsuario();
                         break;
-                    case 3: //Mudar para aperecer o nome do livro na hora da confirmacao
+                    case 3: //Perfeito
                         registrarEmprestimo();
                         break;
-                    case 4: //Arrumar quando nao tiver emprestimos
+                    case 4: //Perfeito
                         devolverEmprestimo();
                         break;
                     case 5: //Perfeito
@@ -64,13 +64,13 @@ public class Main2 {
                     case 10: //Perfeito
                         consultarUsuarios();
                         break;
-                    case 11:
+                    case 11: //Perfeito
                         consultarFuncionarios();
                         break;
-                    case 12:
+                    case 12: // Perfeito
                         consultarEmprestimos();
                         break;
-                    case 14:
+                    case 14: //Perfeito
                         login();
                         break;
                     default:
@@ -131,14 +131,14 @@ public class Main2 {
                 String cpf = scan.next();
                 System.out.println("Informe o isbn do livro: ");
                 String isbn = scan.next();
-                System.out.println("Os dados estão corretos: Cpf " + cpf + " ,ISBN " + isbn + "(S ou N)");
+                System.out.println("Os dados estão corretos: Cpf " + cpf + ", ISBN " + isbn + "(S ou N)");
                 String sn1 = scan.next();
                 if (sn1.equalsIgnoreCase("s")) {
                     if (UsuarioDao.getByCpf(cpf).getEmprestimosAtivos() >= 3) {
                         System.out.println("Limite de emprestimos atingido!\n");
                         return;
                     } else {
-                        EmprestimoDao.inserir(cpf, isbn, "10928571920");
+                        EmprestimoDao.inserir(cpf, isbn, funcionarioPrincipal.getCpf());
                     }
 
                 } else {
@@ -154,7 +154,7 @@ public class Main2 {
                 System.out.println("Os dados estão corretor: Nome " + nome + " ,ISBN " + isbn2 + "(S ou N)");
                 String sn2 = scan.next();
                 if (sn2.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(UsuarioDao.getByNome(nome).getCpf(), isbn2, "10928571920");
+                    EmprestimoDao.inserir(UsuarioDao.getByNome(nome).getCpf(), isbn2, funcionarioPrincipal.getCpf());
                 } else {
                     System.out.println("Tente novamente!\n");
                     return;
@@ -168,7 +168,7 @@ public class Main2 {
                 System.out.println("Os dados estão corretor: Cpf " + cpf3 + " ,Titulo " + titulo + "(S ou N)");
                 String sn3 = scan.next();
                 if (sn3.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(cpf3, LivroDao.getByTitulo(titulo).getIsbn(), "10928571920");
+                    EmprestimoDao.inserir(cpf3, LivroDao.getByTitulo(titulo).getIsbn(), funcionarioPrincipal.getCpf());
                 } else {
                     System.out.println("Tente novamente!\n");
                     return;
@@ -182,7 +182,7 @@ public class Main2 {
                 System.out.println("Os dados estão corretor: Nome " + nome4 + " ,Titulo " + titulo4 + "(S ou N)");
                 String sn4 = scan.next();
                 if (sn4.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(UsuarioDao.getByNome(nome4).getNome(), LivroDao.getByTitulo(titulo4).getIsbn(), "10928571920");
+                    EmprestimoDao.inserir(UsuarioDao.getByNome(nome4).getNome(), LivroDao.getByTitulo(titulo4).getIsbn(), funcionarioPrincipal.getCpf());
                 } else {
                     System.out.println("Tente novamente!\n");
                     return;
@@ -202,15 +202,19 @@ public class Main2 {
         System.out.println("Informe o cpf do Usuario: ");
         String cpf4 = scan.next();
         List<Emprestimo> lista = EmprestimoDao.getByCpf(cpf4);
-        int control = 1;
-        for (Emprestimo e : lista) {
-            Livro l = LivroDao.getById(e.getLivro_id());
-            System.out.println(control + " - " + l.getTitulo() + " " + l.getAutor() + " " + l.getAnoPublicacao() + " " + l.getIsbn());
-            control++;
+        if (lista.isEmpty()) {
+            System.out.println("Usuario sem emprestimos\n");
+        } else {
+            int control = 1;
+            for (Emprestimo e : lista) {
+                Livro l = LivroDao.getById(e.getLivro_id());
+                System.out.println(control + " - " + l.getTitulo() + " " + l.getAutor() + " " + l.getAnoPublicacao() + " " + l.getIsbn());
+                control++;
+            }
+            System.out.println("Informe o numero livro que deseja devolver: ");
+            int opc = scan.nextInt() - 1;
+            EmprestimoDao.excluir(cpf4, LivroDao.getById(lista.get(opc).getLivro_id()).getIsbn());
         }
-        System.out.println("Informe o numero livro que deseja devolver: ");
-        int opc = scan.nextInt() - 1;
-        EmprestimoDao.excluir(cpf4, LivroDao.getById(lista.get(opc).getLivro_id()).getIsbn());
     }
 
     public static void removerUsuario() {
@@ -522,10 +526,13 @@ public class Main2 {
     }
 
     public static void consultarEmprestimos() throws SQLException {
+        Scanner scan = new Scanner(System.in);
         System.out.println("\n- Consultar Emprestimos -");
-        List<Emprestimo> emprestimos = EmprestimoDao.getAll();
+        System.out.println("Informe o cpf do usuario que deseja consultar os emprestimos: ");
+        String cpf = scan.nextLine();
+        List<Emprestimo> emprestimos = EmprestimoDao.getByCpf(cpf);
         if (emprestimos.isEmpty()) {
-            System.out.println("Nenhum funcionario cadastrado");
+            System.out.println("Nenhum emprestimo cadastrado\n");
         } else {
             System.out.printf("%-4s %-30s %-15s %-6s%n",
                     "ID", "Usuario", "Livro", "Funcionario");
@@ -541,8 +548,15 @@ public class Main2 {
         Scanner scan = new Scanner(System.in);
         System.out.println("- Login Funcionario -");
         System.out.println("Informe seu usuario: ");
-        f.setUsuario(scan.nextLine());
+        funcionarioPrincipal.setUsuario(scan.nextLine());
         System.out.println("Informe sua senha: ");
-        f.setSenha(scan.next());
+        funcionarioPrincipal.setSenha(scan.nextLine());
+        if (FuncionarioDao.login(funcionarioPrincipal).getNome() != null) {
+            funcionarioPrincipal.setNome(FuncionarioDao.login(funcionarioPrincipal).getNome());
+            funcionarioPrincipal.setCpf(FuncionarioDao.login(funcionarioPrincipal).getCpf());
+            System.out.println("LOGADO!");
+        } else {
+            login();
+        }
     }
 }

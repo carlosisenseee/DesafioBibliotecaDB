@@ -104,4 +104,26 @@ public class FuncionarioDao {
             return f.getId();
         }
     }
+
+    public static Funcionario login(Funcionario f) {
+        Funcionario funcionario = new Funcionario();
+        String sql = "SELECT * FROM tb_funcionarios WHERE usuario = ? AND senha = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1,f.getUsuario());
+            stm.setString(2, f.getSenha());
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                funcionario.setNome(rs.getString("nome"));
+                funcionario.setCpf(rs.getString("cpf"));
+            } else {
+                System.out.println("Usuario ou senha incorretos");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            return funcionario;
+        }
+    }
 }
