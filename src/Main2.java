@@ -3,8 +3,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-//Fazer a entrada pelo usuario de funcionario, e no menu de login de funcionario fazer a opcao de sair completamente do sistema
-// (Criar na tabela tb_funcionarios e coluna login(nome.sobrenome) e a coluna senha)
+//Mudar a coluna ISBN para unique
 
 public class Main2 {
     static Funcionario funcionarioPrincipal = new Funcionario();
@@ -554,7 +553,7 @@ public class Main2 {
         if (FuncionarioDao.login(funcionarioPrincipal).getNome() != null) {
             funcionarioPrincipal.setNome(FuncionarioDao.login(funcionarioPrincipal).getNome());
             funcionarioPrincipal.setCpf(FuncionarioDao.login(funcionarioPrincipal).getCpf());
-            System.out.println("LOGADO!");
+            System.out.println("Login Realizado com sucesso!\n");
         } else {
             login();
         }
