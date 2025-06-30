@@ -125,4 +125,15 @@ public class UsuarioDao {
             return u;
         }
     }
+
+    public static void setEmprestimosAtivos(Usuario usuario) {
+        String sql = "UPDATE tb_usuario SET emprestimos_ativos = emprestimos_ativos + 1 WHERE id = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setInt(1,usuario.getId());
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

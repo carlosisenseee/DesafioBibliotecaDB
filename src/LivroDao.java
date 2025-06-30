@@ -19,6 +19,7 @@ public class LivroDao {
                 l.setAutor(rs.getString("autor"));
                 l.setAnoPublicacao(rs.getInt("anoPublicacao"));
                 l.setIsbn(rs.getString("isbn"));
+                l.setDisponivel(rs.getBoolean("disponivel"));
                 livros.add(l);
             }
         } catch (SQLException e) {

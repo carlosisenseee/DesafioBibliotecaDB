@@ -5,12 +5,14 @@ import java.util.Scanner;
 
 //Fazer a entrada pelo usuario de funcionario, e no menu de login de funcionario fazer a opcao de sair completamente do sistema
 // (Criar na tabela tb_funcionarios e coluna login(nome.sobrenome) e a coluna senha)
-//Fazer o limitador de livros de ate 3 por usuario
 
 public class Main2 {
-    public static void main(String[] args) throws SQLException {
+    static Funcionario f;
+    public static void main(String[] args) throws Exception {
         if (ConexaoDB.getConexao() != null) {
             int opcao;
+
+            login();
 
             do {
                 System.out.println("""
@@ -27,6 +29,7 @@ public class Main2 {
                         11 - Consultar Funcionarios
                         12 - Consultar Emprestimos
                         13 - Sair
+                        14 - Trocar login de funcionario
                         """);
                 System.out.print("Informe sua escolha: ");
                 opcao = new Scanner(System.in).nextInt();
@@ -37,10 +40,10 @@ public class Main2 {
                     case 2: //Perfeito
                         cadastrarUsuario();
                         break;
-                    case 3: //Perfeito
+                    case 3: //Mudar para aperecer o nome do livro na hora da confirmacao
                         registrarEmprestimo();
                         break;
-                    case 4: //Perfeito
+                    case 4: //Arrumar quando nao tiver emprestimos
                         devolverEmprestimo();
                         break;
                     case 5: //Perfeito
@@ -66,6 +69,9 @@ public class Main2 {
                         break;
                     case 12:
                         consultarEmprestimos();
+                        break;
+                    case 14:
+                        login();
                         break;
                     default:
                         System.out.println("\nOpção Invalida\n");
@@ -106,7 +112,7 @@ public class Main2 {
         UsuarioDao.inserir(u);
     }
 
-    public static void registrarEmprestimo(){
+    public static void registrarEmprestimo() throws Exception {
         Scanner scan = new Scanner(System.in);
         System.out.println("\n- Registrar Emprestimo -");
         System.out.println("""
@@ -128,9 +134,15 @@ public class Main2 {
                 System.out.println("Os dados estão corretos: Cpf " + cpf + " ,ISBN " + isbn + "(S ou N)");
                 String sn1 = scan.next();
                 if (sn1.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(cpf, isbn, "10928571920");
+                    if (UsuarioDao.getByCpf(cpf).getEmprestimosAtivos() >= 3) {
+                        System.out.println("Limite de emprestimos atingido!\n");
+                        return;
+                    } else {
+                        EmprestimoDao.inserir(cpf, isbn, "10928571920");
+                    }
+
                 } else {
-                    System.out.println("Tente novamente!\n");
+                    System.out.println("Emprestimo cancelado\n");
                     return;
                 }
                 break;
@@ -523,5 +535,14 @@ public class Main2 {
             }
             System.out.println();
         }
+    }
+
+    public static void login() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("- Login Funcionario -");
+        System.out.println("Informe seu usuario: ");
+        f.setUsuario(scan.nextLine());
+        System.out.println("Informe sua senha: ");
+        f.setSenha(scan.next());
     }
 }

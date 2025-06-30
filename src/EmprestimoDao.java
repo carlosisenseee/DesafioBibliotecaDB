@@ -36,6 +36,7 @@ public class EmprestimoDao {
             stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
             stm.setInt(2, LivroDao.getByIsbn(isbn).getId());
             stm.setInt(3, FuncionarioDao.getByCpf(cpfU));
+            UsuarioDao.setEmprestimosAtivos(UsuarioDao.getByCpf(cpf));
             if(!LivroDao.getByIsbn(isbn).isDisponivel()) {
                 System.out.println("Livro ja emprestado");
             } else {
