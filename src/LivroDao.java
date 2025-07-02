@@ -87,8 +87,13 @@ public class LivroDao {
             stm.setInt(3,livro.getAnoPublicacao());
             stm.setString(4,livro.getIsbn());
             stm.execute();
+            System.out.println("Livro cadastrado com sucesso!\n");
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            if (e.getErrorCode() == 1062) {
+                System.out.println("Já existem um livro com esse ISBN\n");
+            } else {
+                System.out.println(e.getMessage() + "\n");
+            }
         }
 
     }

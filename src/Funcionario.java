@@ -10,7 +10,6 @@ public class Funcionario {
 
     }
 
-    @Override
     public String toString() {
         return getId() + " " + getNome() + " " + getCpf() + " " + getCargo();
     }

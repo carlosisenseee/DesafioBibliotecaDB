@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FuncionarioDao {
-    public static List<Funcionario> getAll() throws SQLException{
-        List<Funcionario> funcionarios = new ArrayList<Funcionario>();
+    public static List<Funcionario> getAll(){
+        List<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT * FROM tb_funcionarios";
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
@@ -80,13 +80,39 @@ public class FuncionarioDao {
             stm.setString(3,funcionario.getCargo());
             stm.execute();
         } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                System.out.println("Funcionario com cpf ja cadastrado\n");
+            }
             System.out.println(e.getMessage());
         } finally {
             return funcionario;
         }
     }
 
-    public static int getByCpf(String cpf) {
+    public static Funcionario getByNome(String nome) {
+        Funcionario f = new Funcionario();
+        String sql = "SELECT * FROM tb_funcionarios WHERE nome = ?";
+
+        try {
+            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
+            stm.setString(1, nome);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                f.setId(rs.getInt("id"));
+                f.setNome(rs.getString("nome"));
+                f.setCpf(rs.getString("cpf"));
+                f.setCpf(rs.getString("cargo"));
+                f.setUsuario(rs.getString("usuario"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            return f;
+        }
+    }
+
+    public static Funcionario getByCpf(String cpf) {
         Funcionario f = new Funcionario();
         String sql = "SELECT * FROM tb_funcionarios WHERE cpf = ?";
 
@@ -96,12 +122,16 @@ public class FuncionarioDao {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 f.setId(rs.getInt("id"));
+                f.setNome(rs.getString("nome"));
+                f.setCpf(rs.getString("cpf"));
+                f.setCpf(rs.getString("cargo"));
+                f.setUsuario(rs.getString("usuario"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         finally {
-            return f.getId();
+            return f;
         }
     }
 
