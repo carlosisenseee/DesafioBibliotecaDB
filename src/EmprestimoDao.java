@@ -35,7 +35,7 @@ public class EmprestimoDao {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
             stm.setInt(2, LivroDao.getByIsbn(isbn).getId());
-            stm.setInt(3, FuncionarioDao.getByCpf(cpfU));
+            stm.setInt(3, FuncionarioDao.getByCpf(cpfU).getId());
             UsuarioDao.setEmprestimosAtivos(UsuarioDao.getByCpf(cpf));
             if(!LivroDao.getByIsbn(isbn).isDisponivel()) {
                 System.out.println("Livro ja emprestado");

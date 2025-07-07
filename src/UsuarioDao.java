@@ -16,6 +16,7 @@ public class UsuarioDao {
                 u.setId(rs.getInt("id"));
                 u.setNome(rs.getString("nome"));
                 u.setCpf(rs.getString("cpf"));
+                u.setEmprestimosAtivos(rs.getInt("emprestimos_ativos"));
                 usuarios.add(u);
             }
         } catch (SQLException e) {
@@ -36,6 +37,7 @@ public class UsuarioDao {
                 u.setId(rs.getInt("id"));
                 u.setNome(rs.getString("nome"));
                 u.setCpf(rs.getString("cpf"));
+                u.setEmprestimosAtivos(rs.getInt("emprestimos_ativos"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -96,6 +98,7 @@ public class UsuarioDao {
                 u.setId(rs.getInt("id"));
                 u.setCpf(rs.getString("cpf"));
                 u.setNome(rs.getString("nome"));
+                u.setEmprestimosAtivos(rs.getInt("emprestimos_ativos"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -117,6 +120,7 @@ public class UsuarioDao {
                 u.setId(rs.getInt("id"));
                 u.setNome(rs.getString("nome"));
                 u.setCpf(rs.getString("cpf"));
+                u.setEmprestimosAtivos(rs.getInt("emprestimos_ativos"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
