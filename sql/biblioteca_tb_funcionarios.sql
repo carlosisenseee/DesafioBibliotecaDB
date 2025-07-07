@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `biblioteca` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `biblioteca`;
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: biblioteca
@@ -29,7 +31,8 @@ CREATE TABLE `tb_funcionarios` (
   `cargo` varchar(45) DEFAULT NULL,
   `usuario` varchar(50) NOT NULL,
   `senha` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cpf` (`cpf`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,7 +42,7 @@ CREATE TABLE `tb_funcionarios` (
 
 LOCK TABLES `tb_funcionarios` WRITE;
 /*!40000 ALTER TABLE `tb_funcionarios` DISABLE KEYS */;
-INSERT INTO `tb_funcionarios` VALUES (1,'Carlos Alfredo Isensee','10928571920','Presidente','carlos.isensee','bnu@2025$'),(2,'Yan Victor','10928571920','Presidente','yan.morais','bnu@2025$');
+INSERT INTO `tb_funcionarios` VALUES (1,'Carlos Alfredo Isensee','10928571920','Presidente','carlos.isensee','bnu@2025$'),(2,'Yan Victor Morais','84104988987','Presidente','yan.morais','bnu@2025$');
 /*!40000 ALTER TABLE `tb_funcionarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-30  9:16:53
+-- Dump completed on 2025-07-07 10:31:35

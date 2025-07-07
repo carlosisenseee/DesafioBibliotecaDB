@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `biblioteca` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `biblioteca`;
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: biblioteca
@@ -27,11 +29,11 @@ CREATE TABLE `tb_livros` (
   `titulo` varchar(100) DEFAULT NULL,
   `autor` varchar(45) DEFAULT NULL,
   `anoPublicacao` int DEFAULT NULL,
-  `isbn` varchar(45) DEFAULT NULL,
   `disponivel` tinyint(1) DEFAULT '1',
+  `isbn` varchar(13) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `isbn` (`isbn`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +42,7 @@ CREATE TABLE `tb_livros` (
 
 LOCK TABLES `tb_livros` WRITE;
 /*!40000 ALTER TABLE `tb_livros` DISABLE KEYS */;
-INSERT INTO `tb_livros` VALUES (1,'Dom Casmurro','Machado de Assis',1899,'12345',1),(2,'O Cortiço','Aluísio Azevedo',1890,'23456',1),(3,'Iracema','José de Alencar',1865,'34567',1),(4,'O Guarani','José de Alencar',1857,'45678',1),(7,'A Moreninha','Joaquim Manuel de Macedo',1844,'78901',1),(8,'O Ateneu','Raul Pompéia',1888,'89012',1),(9,'Lucíola','José de Alencar',1862,'90123',1),(10,'Quincas Borba','Machado de Assis',1891,'10234',1),(11,'Casa Velha','Machado de Assis',1885,'21345',1),(12,'Helena','Machado de Assis',1876,'32456',1),(13,'A Mão e a Luva','Machado de Assis',1874,'43567',1),(14,'Ressurreição','Machado de Assis',1872,'54678',1),(15,'Til','José de Alencar',1872,'65789',1),(16,'Diva','José de Alencar',1864,'76890',1),(17,'Cinco Minutos','José de Alencar',1856,'87901',1),(18,'A Viuvinha','José de Alencar',1857,'98012',1),(19,'Sonhos d´Ouro','José de Alencar',1872,'19123',1),(20,'Ubirajara','José de Alencar',1874,'20234',1);
+INSERT INTO `tb_livros` VALUES (21,'Lucíola','José de Alencar',1862,0,'9788520932194'),(22,'Quincas Borba','Machado de Assis',1891,0,'9788535910665'),(23,'Casa Velha','Machado de Assis',1885,0,'9788580444095'),(24,'Helena','Machado de Assis',1876,1,'9788520929989'),(25,'A Mão e a Luva','Machado de Assis',1874,1,'9788535932032'),(26,'Ressurreição','Machado de Assis',1872,1,'9788594318603'),(27,'Til','José de Alencar',1872,1,'9788572328891'),(28,'Diva','José de Alencar',1864,1,'9788544002135'),(29,'Cinco Minutos','José de Alencar',1856,1,'9788525416422'),(30,'A Viuvinha','José de Alencar',1857,1,'9788542800016'),(31,'Sonhos d´Ouro','José de Alencar',1872,1,'9786586498230'),(32,'Ubirajara','José de Alencar',1874,1,'9788579023959');
 /*!40000 ALTER TABLE `tb_livros` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-30  9:16:54
+-- Dump completed on 2025-07-07 10:31:35

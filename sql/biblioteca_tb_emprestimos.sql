@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `biblioteca` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `biblioteca`;
 -- MySQL dump 10.13  Distrib 8.0.42, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: biblioteca
@@ -27,6 +29,7 @@ CREATE TABLE `tb_emprestimos` (
   `usuario_id` int DEFAULT NULL,
   `livro_id` int DEFAULT NULL,
   `funcionario_id` int DEFAULT NULL,
+  `data_emprestimo` date NOT NULL DEFAULT (curdate()),
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   KEY `livro_id` (`livro_id`),
@@ -34,7 +37,7 @@ CREATE TABLE `tb_emprestimos` (
   CONSTRAINT `tb_emprestimos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `tb_usuarios` (`id`),
   CONSTRAINT `tb_emprestimos_ibfk_2` FOREIGN KEY (`livro_id`) REFERENCES `tb_livros` (`id`),
   CONSTRAINT `tb_emprestimos_ibfk_3` FOREIGN KEY (`funcionario_id`) REFERENCES `tb_funcionarios` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,54 +46,9 @@ CREATE TABLE `tb_emprestimos` (
 
 LOCK TABLES `tb_emprestimos` WRITE;
 /*!40000 ALTER TABLE `tb_emprestimos` DISABLE KEYS */;
+INSERT INTO `tb_emprestimos` VALUES (44,1,21,1,'2025-07-07'),(45,1,22,1,'2025-07-07'),(46,1,23,1,'2025-07-07');
 /*!40000 ALTER TABLE `tb_emprestimos` ENABLE KEYS */;
 UNLOCK TABLES;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_criar_emprestimo` AFTER INSERT ON `tb_emprestimos` FOR EACH ROW BEGIN
-    UPDATE tb_livros 
-    SET disponivel = FALSE
-    WHERE id = NEW.livro_id;
-    
-    UPDATE tb_usuarios
-    SET emprestimos_ativos = emprestimos_ativos + 1
-    WHERE id = NEW.usuario_id;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `trg_deletar_emprestimo` AFTER DELETE ON `tb_emprestimos` FOR EACH ROW BEGIN
-    UPDATE tb_livros
-    SET disponivel = TRUE
-    WHERE id = OLD.livro_id;
-    
-    UPDATE tb_usuarios
-    SET emprestimos_ativos = emprestimos_ativos - 1
-    WHERE id = OLD.usuario_id;
-END */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -101,4 +59,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-30  9:16:54
+-- Dump completed on 2025-07-07 10:31:35
