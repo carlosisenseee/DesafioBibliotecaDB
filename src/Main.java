@@ -694,11 +694,11 @@ public class Main {
 		if (emprestimos.isEmpty()) {
 			System.out.println("Nenhum emprestimo cadastrado\n");
 		} else {
-			System.out.printf("%-4s %-30s %-15s %-6s%n",
-					"ID", "Usuario", "Livro", "Funcionario");
+			System.out.printf("%-4s %-30s %-25s %-25s %-20s%n",
+					"ID", "Usuario", "Livro", "Funcionario", "Data Emprestimo");
 			for (Emprestimo e : emprestimos) {
-				System.out.printf("%-4s %-30s %-15s %-6s%n",
-						e.getId(), UsuarioDao.getById(e.getUsuario_id()).getNome(), LivroDao.getById(e.getLivro_id()).getTitulo(), FuncionarioDao.getById(e.getFuncionario_id()).getNome());
+				System.out.printf("%-4s %-30s %-25s %-25s %-20s%n",
+						e.getId(), UsuarioDao.getById(e.getUsuario_id()).getNome(), LivroDao.getById(e.getLivro_id()).getTitulo(), FuncionarioDao.getById(e.getFuncionario_id()).getNome(), e.getDataEmprestimo());
 			}
 			System.out.println();
 		}

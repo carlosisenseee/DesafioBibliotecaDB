@@ -76,6 +76,7 @@ public class EmprestimoDao {
                 e.setUsuario_id(rs.getInt("usuario_id"));
                 e.setLivro_id(rs.getInt("livro_id"));
                 e.setFuncionario_id(rs.getInt("funcionario_id"));
+                e.setDataEmprestimo(String.valueOf(rs.getDate("data_emprestimo")));
             } else {
                 System.out.println("Não Encontrado! ");
             }
@@ -101,6 +102,7 @@ public class EmprestimoDao {
                 e.setUsuario_id(rs.getInt("usuario_id"));
                 e.setLivro_id(rs.getInt("livro_id"));
                 e.setFuncionario_id(rs.getInt("funcionario_id"));
+                e.setDataEmprestimo(String.valueOf(rs.getDate("data_emprestimo")));
                 emprestimos.add(e);
             }
         } catch (SQLException ex) {

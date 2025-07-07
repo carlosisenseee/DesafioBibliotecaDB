@@ -3,6 +3,7 @@ public class Emprestimo {
     private int usuario_id;
     private int livro_id;
     private int funcionario_id;
+    private String dataEmprestimo;
 
     public int getId() {
         return id;
@@ -34,5 +35,13 @@ public class Emprestimo {
 
     public void setFuncionario_id(int funcionario_id) {
         this.funcionario_id = funcionario_id;
+    }
+
+    public String getDataEmprestimo() {
+        return dataEmprestimo;
+    }
+
+    public void setDataEmprestimo(String dataEmprestimo) {
+        this.dataEmprestimo = dataEmprestimo;
     }
 }
