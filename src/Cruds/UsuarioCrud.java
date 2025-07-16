@@ -1,10 +1,13 @@
+package Cruds;
+import Models.Usuario;
+import db.ConexaoDB;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioDao {
+public class UsuarioCrud {
     public static List<Usuario> getAll() throws SQLException {
         List<Usuario> usuarios = new ArrayList<Usuario>();
         String sql = "SELECT * FROM tb_usuarios";
@@ -78,7 +81,7 @@ public class UsuarioDao {
             stm.setString(1,usuario.getNome());
             stm.setString(2,usuario.getCpf());
             stm.execute();
-            System.out.println("Usuario cadastrado com sucesso!\n");
+            System.out.println("Models.Usuario cadastrado com sucesso!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {

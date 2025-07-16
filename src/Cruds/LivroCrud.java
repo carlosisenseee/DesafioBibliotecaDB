@@ -1,10 +1,14 @@
+package Cruds;
+import db.ConexaoDB;
+import Models.Livro;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LivroDao {
+public class LivroCrud {
     public static List<Livro> getAll() throws SQLException{
         List<Livro> livros = new ArrayList<Livro>();
         String sql = "SELECT * FROM tb_livros";
@@ -87,7 +91,7 @@ public class LivroDao {
             stm.setInt(3,livro.getAnoPublicacao());
             stm.setString(4,livro.getIsbn());
             stm.execute();
-            System.out.println("Livro cadastrado com sucesso!\n");
+            System.out.println("Models.Livro cadastrado com sucesso!\n");
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 System.out.println("Já existem um livro com esse ISBN\n");

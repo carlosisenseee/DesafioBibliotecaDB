@@ -1,3 +1,13 @@
+import Cruds.EmprestimoCrud;
+import Cruds.FuncionarioCrud;
+import Cruds.LivroCrud;
+import Cruds.UsuarioCrud;
+import Models.Emprestimo;
+import Models.Funcionario;
+import Models.Livro;
+import Models.Usuario;
+import db.ConexaoDB;
+
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -13,17 +23,17 @@ public class Main2 {
 
             do {
                 System.out.println("""
-                        1 - Cadastrar Livro
-                        2 - Cadastrar Usuario
-                        3 - Cadastrar Funcionario
-                        4 - Registrar Emprestimo
+                        1 - Cadastrar Models.Livro
+                        2 - Cadastrar Models.Usuario
+                        3 - Cadastrar Models.Funcionario
+                        4 - Registrar Models.Emprestimo
                         5 - Registrar Devoluções
-                        6 - Remover Livro
-                        7 - Remover Usuario
-                        8 - Remover Funcionario
-                        9 - Alterar Livro
-                        10 - Alterar Usuario
-                        11 - Alterar Funcionario
+                        6 - Remover Models.Livro
+                        7 - Remover Models.Usuario
+                        8 - Remover Models.Funcionario
+                        9 - Alterar Models.Livro
+                        10 - Alterar Models.Usuario
+                        11 - Alterar Models.Funcionario
                         12 - Consultar Livros
                         13 - Consultar Usuarios
                         14 - Consultar Funcionarios
@@ -96,7 +106,7 @@ public class Main2 {
     }
 
     public static void cadastrarLivro() {
-        System.out.println("\n- Cadastrar Livro -");
+        System.out.println("\n- Cadastrar Models.Livro -");
         Livro l = new Livro();
         System.out.print("Informe o titulo do livro: ");
         l.setTitulo(new Scanner(System.in).nextLine());
@@ -111,21 +121,21 @@ public class Main2 {
         }
         System.out.print("Informe o ISBN: ");
         l.setIsbn(new Scanner(System.in).nextLine());
-        LivroDao.inserir(l);
+        LivroCrud.inserir(l);
     }
 
     public static void cadastrarUsuario() {
-        System.out.println("\n- Cadastrar Usuario -");
+        System.out.println("\n- Cadastrar Models.Usuario -");
         Usuario u = new Usuario();
         System.out.print("Informe o nome do usuario: ");
         u.setNome(new Scanner(System.in).nextLine());
         System.out.print("Informe o cpf do usuario: ");
         u.setCpf(new Scanner(System.in).nextLine());
-        UsuarioDao.inserir(u);
+        UsuarioCrud.inserir(u);
     }
 
     public static void cadastrarFuncionario() {
-        System.out.println("\n- Cadastrar Funcionario -");
+        System.out.println("\n- Cadastrar Models.Funcionario -");
         Funcionario f = new Funcionario();
         System.out.print("Informe o nome do funcionario: ");
         f.setNome(new Scanner(System.in).nextLine());
@@ -137,12 +147,12 @@ public class Main2 {
         f.setUsuario(new Scanner(System.in).nextLine());
         System.out.println("Informe a senha do usuario: ");
         f.setUsuario(new Scanner(System.in).nextLine());
-        FuncionarioDao.inserir(f);
+        FuncionarioCrud.inserir(f);
     }
 
     public static void registrarEmprestimo() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("\n- Registrar Emprestimo -");
+        System.out.println("\n- Registrar Models.Emprestimo -");
         System.out.println("""
                 Deseja informar
                 1 - Cpf e Isbn
@@ -162,15 +172,15 @@ public class Main2 {
                 System.out.println("Os dados estão corretos: Cpf " + cpf + ", ISBN " + isbn + "(S ou N)");
                 String sn1 = scan.next();
                 if (sn1.equalsIgnoreCase("s")) {
-                    if (UsuarioDao.getByCpf(cpf).getEmprestimosAtivos() >= 3) {
+                    if (UsuarioCrud.getByCpf(cpf).getEmprestimosAtivos() >= 3) {
                         System.out.println("Limite de emprestimos atingido!\n");
                         return;
                     } else {
-                        EmprestimoDao.inserir(cpf, isbn, funcionarioPrincipal.getCpf());
+                        EmprestimoCrud.inserir(cpf, isbn, funcionarioPrincipal.getCpf());
                     }
 
                 } else {
-                    System.out.println("Emprestimo cancelado\n");
+                    System.out.println("Models.Emprestimo cancelado\n");
                     return;
                 }
                 break;
@@ -182,7 +192,7 @@ public class Main2 {
                 System.out.println("Os dados estão corretor: Nome " + nome + " ,ISBN " + isbn2 + "(S ou N)");
                 String sn2 = scan.next();
                 if (sn2.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(UsuarioDao.getByNome(nome).getCpf(), isbn2, funcionarioPrincipal.getCpf());
+                    EmprestimoCrud.inserir(UsuarioCrud.getByNome(nome).getCpf(), isbn2, funcionarioPrincipal.getCpf());
                 } else {
                     System.out.println("Tente novamente!\n");
                     return;
@@ -196,7 +206,7 @@ public class Main2 {
                 System.out.println("Os dados estão corretor: Cpf " + cpf3 + " ,Titulo " + titulo + "(S ou N)");
                 String sn3 = scan.next();
                 if (sn3.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(cpf3, LivroDao.getByTitulo(titulo).getIsbn(), funcionarioPrincipal.getCpf());
+                    EmprestimoCrud.inserir(cpf3, LivroCrud.getByTitulo(titulo).getIsbn(), funcionarioPrincipal.getCpf());
                 } else {
                     System.out.println("Tente novamente!\n");
                     return;
@@ -210,7 +220,7 @@ public class Main2 {
                 System.out.println("Os dados estão corretor: Nome " + nome4 + " ,Titulo " + titulo4 + "(S ou N)");
                 String sn4 = scan.next();
                 if (sn4.equalsIgnoreCase("s")) {
-                    EmprestimoDao.inserir(UsuarioDao.getByNome(nome4).getNome(), LivroDao.getByTitulo(titulo4).getIsbn(), funcionarioPrincipal.getCpf());
+                    EmprestimoCrud.inserir(UsuarioCrud.getByNome(nome4).getNome(), LivroCrud.getByTitulo(titulo4).getIsbn(), funcionarioPrincipal.getCpf());
                 } else {
                     System.out.println("Tente novamente!\n");
                     return;
@@ -227,27 +237,27 @@ public class Main2 {
     public static void devolverEmprestimo() {
         Scanner scan = new Scanner(System.in);
         System.out.println("\n- Registrar Devolução -");
-        System.out.println("Informe o cpf do Usuario: ");
+        System.out.println("Informe o cpf do Models.Usuario: ");
         String cpf4 = scan.next();
-        List<Emprestimo> lista = EmprestimoDao.getByCpf(cpf4);
+        List<Emprestimo> lista = EmprestimoCrud.getByCpf(cpf4);
         if (lista.isEmpty()) {
-            System.out.println("Usuario sem emprestimos\n");
+            System.out.println("Models.Usuario sem emprestimos\n");
         } else {
             int control = 1;
             for (Emprestimo e : lista) {
-                Livro l = LivroDao.getById(e.getLivro_id());
+                Livro l = LivroCrud.getById(e.getLivro_id());
                 System.out.println(control + " - " + l.getTitulo() + " " + l.getAutor() + " " + l.getAnoPublicacao() + " " + l.getIsbn());
                 control++;
             }
             System.out.println("Informe o numero livro que deseja devolver: ");
             int opc = scan.nextInt() - 1;
-            EmprestimoDao.excluir(cpf4, LivroDao.getById(lista.get(opc).getLivro_id()).getIsbn());
+            EmprestimoCrud.excluir(cpf4, LivroCrud.getById(lista.get(opc).getLivro_id()).getIsbn());
         }
     }
 
     public static void removerLivro() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("\n- Remover Livro -");
+        System.out.println("\n- Remover Models.Livro -");
         System.out.println("""
                                         Deseja Informar
                                         1 - Isbn do livro
@@ -260,9 +270,9 @@ public class Main2 {
             case 1:
                 System.out.print("Informe o ISBN do livro: ");
                 String isbn = scan.nextLine();
-                Livro livro = LivroDao.getByIsbn(isbn);
+                Livro livro = LivroCrud.getByIsbn(isbn);
                 if (livro.getId() == 0) {
-                    System.out.println("Livro não encontrado");
+                    System.out.println("Models.Livro não encontrado");
                     break;
                 }
                 System.out.println("Esse é o livro que deseja remover? (S ou N) \n" + livro.toString());
@@ -272,14 +282,14 @@ public class Main2 {
                     System.out.println("Cancelando");
                     break;
                 }
-                LivroDao.excluir(livro.getId());
+                LivroCrud.excluir(livro.getId());
                 break;
             case 2:
                 System.out.print("Informe o Titulo do livro: ");
                 String titulo = scan.nextLine();
-                Livro livro2 = LivroDao.getByTitulo(titulo);
+                Livro livro2 = LivroCrud.getByTitulo(titulo);
                 if (livro2.getId() == 0) {
-                    System.out.println("Livro não encontrado");
+                    System.out.println("Models.Livro não encontrado");
                     break;
                 }
                 System.out.println("Esse é o livro que deseja remover? (S ou N) \n" + livro2.toString());
@@ -289,7 +299,7 @@ public class Main2 {
                     System.out.println("Cancelando");
                     break;
                 }
-                LivroDao.excluir(livro2.getId());
+                LivroCrud.excluir(livro2.getId());
                 break;
             case 3:
                 System.out.println("Saindo...\n");
@@ -302,11 +312,11 @@ public class Main2 {
 
     public static void removerUsuario() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("\n- Remover Usuario -");
+        System.out.println("\n- Remover Models.Usuario -");
         System.out.println("""
                                         Deseja Informar
-                                        1 - Cpf do Usuario
-                                        2 - Nome do Usuario
+                                        1 - Cpf do Models.Usuario
+                                        2 - Nome do Models.Usuario
                                         3 - Sair""");
         System.out.print("Informe sua opção: ");
         int opc5 = scan.nextInt();
@@ -316,11 +326,11 @@ public class Main2 {
                 System.out.print("Informe o Cpf do usuario: ");
                 String cpf = scan.next();
                 System.out.println("Confirme os dados");
-                System.out.println(UsuarioDao.getByCpf(cpf));
+                System.out.println(UsuarioCrud.getByCpf(cpf));
                 System.out.println("Digite S se quiser remover ou N para cancelar");
                 String sn = scan.next();
                 if (sn.equalsIgnoreCase("s")) {
-                    UsuarioDao.excluir(UsuarioDao.getByCpf(cpf).getId());
+                    UsuarioCrud.excluir(UsuarioCrud.getByCpf(cpf).getId());
                 } else {
                     System.out.println("Cancelado");
                 }
@@ -329,11 +339,11 @@ public class Main2 {
                 System.out.println("Informe o nome do usuario: ");
                 String nome = scan.nextLine();
                 System.out.println("Confirme os dados");
-                System.out.println(UsuarioDao.getByNome(nome));
+                System.out.println(UsuarioCrud.getByNome(nome));
                 System.out.println("Digite S se quiser remover ou N para cancelar");
                 String sn2 = scan.nextLine().trim();
                 if (sn2.equalsIgnoreCase("s")) {
-                    UsuarioDao.excluir(UsuarioDao.getByNome(nome).getId());
+                    UsuarioCrud.excluir(UsuarioCrud.getByNome(nome).getId());
                 } else {
                     System.out.println("Cancelado");
                 }
@@ -349,7 +359,7 @@ public class Main2 {
 
     public static void removerFuncionario() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("\n- Remover Funcionario -");
+        System.out.println("\n- Remover Models.Funcionario -");
         System.out.println("""
                                         Deseja Informar
                                         1 - Cpf do funcionario
@@ -363,11 +373,11 @@ public class Main2 {
                 System.out.print("Informe o Cpf do funcionario: ");
                 String cpf = scan.next();
                 System.out.println("Confirme os dados");
-                System.out.println(FuncionarioDao.getByCpf(cpf));
+                System.out.println(FuncionarioCrud.getByCpf(cpf));
                 System.out.println("Digite S se quiser remover ou N para cancelar");
                 String sn = scan.next();
                 if (sn.equalsIgnoreCase("s")) {
-                    FuncionarioDao.excluir(FuncionarioDao.getByCpf(cpf).getId());
+                    FuncionarioCrud.excluir(FuncionarioCrud.getByCpf(cpf).getId());
                 } else {
                     System.out.println("Cancelado");
                 }
@@ -376,11 +386,11 @@ public class Main2 {
                 System.out.println("Informe o nome do funcionario: ");
                 String nome = scan.nextLine();
                 System.out.println("Confirme os dados");
-                System.out.println(UsuarioDao.getByNome(nome));
+                System.out.println(UsuarioCrud.getByNome(nome));
                 System.out.println("Digite S se quiser remover ou N para cancelar");
                 String sn2 = scan.nextLine().trim();
                 if (sn2.equalsIgnoreCase("s")) {
-                    UsuarioDao.excluir(UsuarioDao.getByNome(nome).getId());
+                    UsuarioCrud.excluir(UsuarioCrud.getByNome(nome).getId());
                 } else {
                     System.out.println("Cancelado");
                 }
@@ -396,11 +406,11 @@ public class Main2 {
 
     public static void alterarLivro() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("\n- Alterar Livro -");
+        System.out.println("\n- Alterar Models.Livro -");
         System.out.println("""
                                         Deseja Informar
-                                        1 - Isbn do Livro
-                                        2 - Titulo do Livro
+                                        1 - Isbn do Models.Livro
+                                        2 - Titulo do Models.Livro
                                         3 - Sair""");
         System.out.print("Informe sua opção: ");
         int opc = scan.nextInt();
@@ -409,9 +419,9 @@ public class Main2 {
             case 1:
                 System.out.print("Informe o ISBN do livro: ");
                 String isbn = scan.nextLine();
-                Livro livro = LivroDao.getByIsbn(isbn);
+                Livro livro = LivroCrud.getByIsbn(isbn);
                 if (livro.getId() == 0) {
-                    System.out.println("Livro não encontrado");
+                    System.out.println("Models.Livro não encontrado");
                     break;
                 }
                 System.out.println("Esse é o livro que deseja alterar? (S ou N) \n" + livro.toString());
@@ -437,14 +447,14 @@ public class Main2 {
                 System.out.println("Digite o novo ISBN: ");
                 String isbnNovo = scan.next();
                 livro.setIsbn(isbnNovo);
-                LivroDao.alterar(livro);
+                LivroCrud.alterar(livro);
                 break;
             case 2:
                 System.out.print("Informe o titulo do livro: ");
                 String titulo2 = scan.nextLine();
-                Livro livro2 = LivroDao.getByTitulo(titulo2);
+                Livro livro2 = LivroCrud.getByTitulo(titulo2);
                 if (livro2.getId() == 0) {
-                    System.out.println("Livro não encontrado");
+                    System.out.println("Models.Livro não encontrado");
                     break;
                 }
                 System.out.println("Esse é o livro que deseja alterar? (S ou N) \n" + livro2.toString());
@@ -470,7 +480,7 @@ public class Main2 {
                 System.out.println("Digite o novo ISBN: ");
                 String isbnNovo2 = scan.next();
                 livro2.setIsbn(isbnNovo2);
-                LivroDao.alterar(livro2);
+                LivroCrud.alterar(livro2);
                 break;
             case 3:
                 System.out.println("Saindo...\n");
@@ -483,11 +493,11 @@ public class Main2 {
 
     public static void alterarUsuario() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("\n- Alterar Usuario -");
+        System.out.println("\n- Alterar Models.Usuario -");
         System.out.println("""
                                         Deseja Informar
-                                        1 - Cpf do Usuario
-                                        2 - Nome do Usuario
+                                        1 - Cpf do Models.Usuario
+                                        2 - Nome do Models.Usuario
                                         3 - Sair""");
         System.out.print("Informe sua opção: ");
         int opc = scan.nextInt();
@@ -496,9 +506,9 @@ public class Main2 {
             case 1:
                 System.out.print("Informe o Cpf do usuario: ");
                 String cpf = scan.nextLine();
-                Usuario usuario = UsuarioDao.getByCpf(cpf);
+                Usuario usuario = UsuarioCrud.getByCpf(cpf);
                 if (usuario.getId() == 0) {
-                    System.out.println("Usuario não encontrado");
+                    System.out.println("Models.Usuario não encontrado");
                     break;
                 }
                 System.out.println("Esse é o usuario que deseja alterar? (S ou N) \n" + usuario.toString());
@@ -516,14 +526,14 @@ public class Main2 {
                 System.out.println("Digite o novo Cpf: ");
                 String cpf2 = scan.nextLine();
                 usuario.setCpf(cpf2);
-                UsuarioDao.alterar(usuario);
+                UsuarioCrud.alterar(usuario);
                 break;
             case 2:
                 System.out.println("Informe o nome do usuario: ");
                 String nome2 = scan.nextLine();
-                Usuario usuario2 = UsuarioDao.getByNome(nome2);
+                Usuario usuario2 = UsuarioCrud.getByNome(nome2);
                 if (usuario2.getId() == 0) {
-                    System.out.println("Usuario não encontrado");
+                    System.out.println("Models.Usuario não encontrado");
                     break;
                 }
                 System.out.println("Esse é o usuario que deseja alterar? (S ou N) \n" + usuario2.toString());
@@ -541,7 +551,7 @@ public class Main2 {
                 System.out.println("Digite o novo Cpf: ");
                 String cpf4 = scan.nextLine();
                 usuario2.setCpf(cpf4);
-                UsuarioDao.alterar(usuario2);
+                UsuarioCrud.alterar(usuario2);
                 break;
             case 3:
                 System.out.println("Saindo...\n");
@@ -567,9 +577,9 @@ public class Main2 {
             case 1:
                 System.out.print("Informe o Cpf do funcionario: ");
                 String cpf = scan.nextLine();
-                Funcionario funcionario = FuncionarioDao.getByCpf(cpf);
+                Funcionario funcionario = FuncionarioCrud.getByCpf(cpf);
                 if (funcionario.getId() == 0) {
-                    System.out.println("Funcionario não encontrado");
+                    System.out.println("Models.Funcionario não encontrado");
                     break;
                 }
                 System.out.println("Esse é o funcionario que deseja alterar? (S ou N) \n" + funcionario.toString());
@@ -594,13 +604,13 @@ public class Main2 {
 
                 System.out.println("Digite a nova senha: ");
                 funcionario.setSenha(scan.nextLine());
-                FuncionarioDao.alterar(funcionario);
+                FuncionarioCrud.alterar(funcionario);
                 break;
             case 2:
                 System.out.println("Informe o nome do usuario: ");
-                Funcionario funcionario1 = FuncionarioDao.getByNome(scan.nextLine());
+                Funcionario funcionario1 = FuncionarioCrud.getByNome(scan.nextLine());
                 if (funcionario1.getId() == 0) {
-                    System.out.println("Funcionario não encontrado");
+                    System.out.println("Models.Funcionario não encontrado");
                     break;
                 }
                 System.out.println("Esse é o usuario que deseja alterar? (S ou N) \n" + funcionario1.toString());
@@ -626,7 +636,7 @@ public class Main2 {
                 System.out.println("Digite a nova senha: ");
                 funcionario1.setSenha(scan.nextLine());
 
-                FuncionarioDao.alterar(funcionario1);
+                FuncionarioCrud.alterar(funcionario1);
                 break;
             case 3:
                 System.out.println("Saindo...\n");
@@ -639,7 +649,7 @@ public class Main2 {
 
     public static void consultarLivros() throws SQLException {
         System.out.println("\n- Consultar livros -");
-        List<Livro> acervo = LivroDao.getAll();
+        List<Livro> acervo = LivroCrud.getAll();
         if (acervo.isEmpty()) {
             System.out.println("Nenhum livro cadastrado");
         } else {
@@ -655,7 +665,7 @@ public class Main2 {
 
     public static void consultarUsuarios() throws SQLException {
         System.out.println("\n- Consultar Usuarios -");
-        List<Usuario> usuarios = UsuarioDao.getAll();
+        List<Usuario> usuarios = UsuarioCrud.getAll();
         if (usuarios.isEmpty()) {
             System.out.println("Nenhum usuario cadastrado");
         } else {
@@ -671,7 +681,7 @@ public class Main2 {
 
     public static void consultarFuncionarios() throws SQLException {
         System.out.println("\n- Consultar Funcionarios -");
-        List<Funcionario> funcionarios = FuncionarioDao.getAll();
+        List<Funcionario> funcionarios = FuncionarioCrud.getAll();
         if (funcionarios.isEmpty()) {
             System.out.println("Nenhum funcionario cadastrado");
         } else {
@@ -690,15 +700,15 @@ public class Main2 {
         System.out.println("\n- Consultar Emprestimos -");
         System.out.println("Informe o cpf do usuario que deseja consultar os emprestimos: ");
         String cpf = scan.nextLine();
-        List<Emprestimo> emprestimos = EmprestimoDao.getByCpf(cpf);
+        List<Emprestimo> emprestimos = EmprestimoCrud.getByCpf(cpf);
         if (emprestimos.isEmpty()) {
             System.out.println("Nenhum emprestimo cadastrado\n");
         } else {
             System.out.printf("%-4s %-30s %-15s %-6s%n",
-                    "ID", "Usuario", "Livro", "Funcionario");
+                    "ID", "Models.Usuario", "Models.Livro", "Models.Funcionario");
             for (Emprestimo e : emprestimos) {
                 System.out.printf("%-4s %-30s %-15s %-6s%n",
-                        e.getId(), UsuarioDao.getById(e.getUsuario_id()).getNome(), LivroDao.getById(e.getLivro_id()).getTitulo(), FuncionarioDao.getById(e.getFuncionario_id()).getNome());
+                        e.getId(), UsuarioCrud.getById(e.getUsuario_id()).getNome(), LivroCrud.getById(e.getLivro_id()).getTitulo(), FuncionarioCrud.getById(e.getFuncionario_id()).getNome());
             }
             System.out.println();
         }
@@ -706,14 +716,14 @@ public class Main2 {
 
     public static void login() {
         Scanner scan = new Scanner(System.in);
-        System.out.println("- Login Funcionario -");
+        System.out.println("- Login Models.Funcionario -");
         System.out.println("Informe seu usuario: ");
         funcionarioPrincipal.setUsuario(scan.nextLine());
         System.out.println("Informe sua senha: ");
         funcionarioPrincipal.setSenha(scan.nextLine());
-        if (FuncionarioDao.login(funcionarioPrincipal).getNome() != null) {
-            funcionarioPrincipal.setNome(FuncionarioDao.login(funcionarioPrincipal).getNome());
-            funcionarioPrincipal.setCpf(FuncionarioDao.login(funcionarioPrincipal).getCpf());
+        if (FuncionarioCrud.login(funcionarioPrincipal).getNome() != null) {
+            funcionarioPrincipal.setNome(FuncionarioCrud.login(funcionarioPrincipal).getNome());
+            funcionarioPrincipal.setCpf(FuncionarioCrud.login(funcionarioPrincipal).getCpf());
             System.out.println("Login Realizado com sucesso!\n");
         } else {
             login();

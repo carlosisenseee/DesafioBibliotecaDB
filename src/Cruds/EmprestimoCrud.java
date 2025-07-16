@@ -1,10 +1,15 @@
+package Cruds;
+
+import Models.Emprestimo;
+import db.ConexaoDB;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmprestimoDao {
+public class EmprestimoCrud {
     public static List<Emprestimo> getAll() throws SQLException {
         List<Emprestimo> emprestimos = new ArrayList<>();
         String sql = "SELECT * FROM tb_emprestimos";
@@ -33,12 +38,12 @@ public class EmprestimoDao {
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
-            stm.setInt(2, LivroDao.getByIsbn(isbn).getId());
-            stm.setInt(3, FuncionarioDao.getByCpf(cpfU).getId());
-            UsuarioDao.setEmprestimosAtivos(UsuarioDao.getByCpf(cpf));
-            if(!LivroDao.getByIsbn(isbn).isDisponivel()) {
-                System.out.println("Livro ja emprestado");
+            stm.setInt(1, UsuarioCrud.getByCpf(cpf).getId());
+            stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
+            stm.setInt(3, FuncionarioCrud.getByCpf(cpfU).getId());
+            UsuarioCrud.setEmprestimosAtivos(UsuarioCrud.getByCpf(cpf));
+            if(!LivroCrud.getByIsbn(isbn).isDisponivel()) {
+                System.out.println("Models.Livro ja emprestado");
             } else {
                 stm.execute();
             }
@@ -54,7 +59,7 @@ public class EmprestimoDao {
         String sql = "DELETE FROM tb_emprestimos WHERE id = ?";
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1, EmprestimoDao.getByCpfEIsbn(cpf, isbn).getId());
+            stm.setInt(1, EmprestimoCrud.getByCpfEIsbn(cpf, isbn).getId());
             stm.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -68,8 +73,8 @@ public class EmprestimoDao {
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
-            stm.setInt(2, LivroDao.getByIsbn(isbn).getId());
+            stm.setInt(1, UsuarioCrud.getByCpf(cpf).getId());
+            stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 e.setId(rs.getInt("id"));
@@ -94,7 +99,7 @@ public class EmprestimoDao {
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1, UsuarioDao.getByCpf(cpf).getId());
+            stm.setInt(1, UsuarioCrud.getByCpf(cpf).getId());
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Emprestimo e = new Emprestimo();

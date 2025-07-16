@@ -1,3 +1,5 @@
+package Models;
+
 public class Emprestimo {
     private int id;
     private int usuario_id;

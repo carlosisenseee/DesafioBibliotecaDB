@@ -1,10 +1,14 @@
+package Cruds;
+import db.ConexaoDB;
+import Models.Funcionario;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FuncionarioDao {
+public class FuncionarioCrud {
     public static List<Funcionario> getAll(){
         List<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT * FROM tb_funcionarios";
@@ -81,7 +85,7 @@ public class FuncionarioDao {
             stm.execute();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
-                System.out.println("Funcionario com cpf ja cadastrado\n");
+                System.out.println("Models.Funcionario com cpf ja cadastrado\n");
             }
             System.out.println(e.getMessage());
         } finally {
@@ -148,7 +152,7 @@ public class FuncionarioDao {
                 funcionario.setNome(rs.getString("nome"));
                 funcionario.setCpf(rs.getString("cpf"));
             } else {
-                System.out.println("Usuario ou senha incorretos");
+                System.out.println("Models.Usuario ou senha incorretos");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
