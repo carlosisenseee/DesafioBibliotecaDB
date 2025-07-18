@@ -91,7 +91,7 @@ public class LivroCrud {
             stm.setInt(3,livro.getAnoPublicacao());
             stm.setString(4,livro.getIsbn());
             stm.execute();
-            System.out.println("Models.Livro cadastrado com sucesso!\n");
+            System.out.println("Livro cadastrado com sucesso!\n");
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 System.out.println("Já existem um livro com esse ISBN\n");

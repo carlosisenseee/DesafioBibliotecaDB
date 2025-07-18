@@ -41,9 +41,8 @@ public class EmprestimoCrud {
             stm.setInt(1, UsuarioCrud.getByCpf(cpf).getId());
             stm.setInt(2, LivroCrud.getByIsbn(isbn).getId());
             stm.setInt(3, FuncionarioCrud.getByCpf(cpfU).getId());
-            UsuarioCrud.setEmprestimosAtivos(UsuarioCrud.getByCpf(cpf));
             if(!LivroCrud.getByIsbn(isbn).isDisponivel()) {
-                System.out.println("Models.Livro ja emprestado");
+                System.out.println("Livro ja emprestado");
             } else {
                 stm.execute();
             }

@@ -50,27 +50,29 @@ public class UsuarioCrud {
         }
     }
 
-    public static void excluir(int id) {
+    public static int excluir(int id) {
         String sql = "DELETE FROM tb_usuarios WHERE id = ?";
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setInt(1, id);
-            stm.execute();
+            return stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return 0;
         }
     }
 
-    public static void alterar(Usuario usuario) {
+    public static int alterar(Usuario usuario) {
         String sql = "UPDATE tb_usuarios SET nome = ?, cpf = ? WHERE id = ?";
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setString(1, usuario.getNome());
             stm.setString(2, usuario.getCpf());
             stm.setInt(3, usuario.getId());
-            stm.execute();
+            return stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return 0;
         }
     }
 
@@ -81,7 +83,7 @@ public class UsuarioCrud {
             stm.setString(1,usuario.getNome());
             stm.setString(2,usuario.getCpf());
             stm.execute();
-            System.out.println("Models.Usuario cadastrado com sucesso!\n");
+            System.out.println("Usuario cadastrado com sucesso!\n");
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         } finally {
@@ -133,14 +135,4 @@ public class UsuarioCrud {
         }
     }
 
-    public static void setEmprestimosAtivos(Usuario usuario) {
-        String sql = "UPDATE tb_usuario SET emprestimos_ativos = emprestimos_ativos + 1 WHERE id = ?";
-
-        try {
-            PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
-            stm.setInt(1,usuario.getId());
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }

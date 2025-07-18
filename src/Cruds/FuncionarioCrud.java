@@ -85,7 +85,7 @@ public class FuncionarioCrud {
             stm.execute();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
-                System.out.println("Models.Funcionario com cpf ja cadastrado\n");
+                System.out.println("Funcionario com cpf ja cadastrado\n");
             }
             System.out.println(e.getMessage());
         } finally {
@@ -152,7 +152,7 @@ public class FuncionarioCrud {
                 funcionario.setNome(rs.getString("nome"));
                 funcionario.setCpf(rs.getString("cpf"));
             } else {
-                System.out.println("Models.Usuario ou senha incorretos");
+                System.out.println("Usuario ou senha incorretos");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
