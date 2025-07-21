@@ -13,7 +13,7 @@ public class Funcionario {
     }
 
     public String toString() {
-        return getId() + " " + getNome() + " " + getCpf() + " " + getCargo();
+        return getId() + " " + getNome() + " " + getCpf() + " " + getCargo() + " " + getUsuario() + " " + getSenha();
     }
 
     public int getId() {

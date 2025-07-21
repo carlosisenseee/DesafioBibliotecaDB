@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioCrudTest {
@@ -30,8 +29,8 @@ public class UsuarioCrudTest {
     getbynomeNaoExiste - ok
     alterarExiste - ok
     alterarNaoexiste - ok
-    excluirExiste -
-    excluirNaoexiste -
+    excluirExiste - ok
+    excluirNaoexiste - ok
      */
 
     @Test
@@ -45,8 +44,6 @@ public class UsuarioCrudTest {
 
         assertNotNull(resultado, "Usuário não foi encontrado no banco");
         assertEquals("Powershell", resultado.getNome());
-
-        //service.excluir(resultado.getId());
     }
 
     @Test

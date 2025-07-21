@@ -33,7 +33,7 @@ public class LivroCrud {
         }
     }
 
-    public static Livro getById(int id) {
+    public static Livro getById(int id) throws SQLException {
         Livro l = new Livro();
         String sql = "SELECT * FROM tb_livros WHERE id = ?";
 
@@ -42,6 +42,7 @@ public class LivroCrud {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
+                l.setId(rs.getInt("id"));
                 l.setTitulo(rs.getString("titulo"));
                 l.setAutor(rs.getString("autor"));
                 l.setAnoPublicacao(rs.getInt("anoPublicacao"));
@@ -54,20 +55,21 @@ public class LivroCrud {
         }
     }
 
-    public static void excluir(int id) {
+    public static int excluir(int id) {
         String sql = "DELETE FROM tb_livros WHERE id = ?";
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
             stm.setInt(1, id);
-            stm.execute();
+            return stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return 0;
         }
     }
 
-    public static void alterar(Livro livro) {
-        String sql = "UPTADE tb_livros SET titulo = ?, autor = ?, anoPublicacao = ?, isbn = ?";
+    public static int alterar(Livro livro) {
+        String sql = "UPDATE tb_livros SET titulo = ?, autor = ?, anoPublicacao = ?, isbn = ? WHERE id = ?";
 
         try {
             PreparedStatement stm = ConexaoDB.getConexao().prepareStatement(sql);
@@ -75,9 +77,11 @@ public class LivroCrud {
             stm.setString(2, livro.getAutor());
             stm.setInt(3, livro.getAnoPublicacao());
             stm.setString(4, livro.getIsbn());
-            stm.execute();
+            stm.setInt(5, livro.getId());
+            return stm.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return 0;
         }
     }
 

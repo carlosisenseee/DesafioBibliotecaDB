@@ -233,7 +233,7 @@ public class Main {
 		}
 	}
 
-	public static void devolverEmprestimo() {
+	public static void devolverEmprestimo() throws SQLException {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("\n- Registrar Devolução -");
 		System.out.println("Informe o cpf do Usuario: ");
